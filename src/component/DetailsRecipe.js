@@ -3,7 +3,7 @@ import React, { useEffect, useState } from "react";
 
 function DetailsRecipe(props) {
   const { id } = props;
-  const apikey = "12bebd1cfafd4868928e9a42e358ab99";
+  const apikey = "13e4cb48cd9c4aa0b91d998d61ff84ae";
 
   const [state, setState] = useState({ recipe: [] });
   const [loading, setLoading] = useState(true);
@@ -21,7 +21,6 @@ function DetailsRecipe(props) {
       })
       .then((result) => {
         setState({ ...state, recipe: result[0] });
-        console.log(result);
         setLoading(false);
       })
       .catch((error) => {
