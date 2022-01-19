@@ -4,9 +4,11 @@ import { LoadingOutlined } from "@ant-design/icons";
 
 function ListRecipes(props) {
   const { setActiveComponent } = props;
-  const apikey = "12bebd1cfafd4868928e9a42e358ab99";
+  const apikey = "1a3ecf21f1264ffbbcfac427d1d2abfd";
 
-  const [state, setState] = useState({ randomRecipe: [], searchedRecipes: [] });
+  const [randomRecipe, setRandomRecipe] = useState({ recipe: [] });
+  const [searchedRecipes, setSearchedRecipes] = useState({ recipes: [] });
+  const [state, setState] = useState();
   const [loading, setLoading] = useState(true);
 
   useEffect(() => {
@@ -16,29 +18,56 @@ function ListRecipes(props) {
         return response.json();
       })
       .then((result) => {
-        console.log(result);
-        setState({ ...state, randomRecipe: result.recipes });
+        setRandomRecipe({ ...randomRecipe, recipe: result.recipes });
         setLoading(false);
       })
       .catch((error) => {
         console.log(error);
         setLoading(false);
       });
-  }, []);
+  }, [state]);
 
-  function searchRecipes(text) {
-    console.log(text)
+  function searchRecipes() {
+    console.log(document.getElementById("number").value);
+    var search = document.getElementById("search").value;
+    var number = document.getElementById("number").value
+      ? document.getElementById("number").value
+      : 10;
+
     fetch(
-      "https://api.spoonacular.com/recipes/autocomplete?number=10&query=" +
-        text +
-        "&apiKey=" + apikey
+      "https://api.spoonacular.com/recipes/autocomplete?number=" +
+        number +
+        "&query=" +
+        search +
+        "&apiKey=" +
+        apikey
     )
       .then((response) => {
         return response.json();
       })
       .then((result) => {
-        setState({ searchRecipes: result.recipes });
-        console.log(this.state.searchedRecipes);
+        var stringId = "";
+        result.map((elem) => (stringId = stringId.concat(elem.id).concat(",")));
+        getAllInfo(stringId);
+      })
+      .catch((error) => {
+        console.log(error);
+      });
+  }
+
+  function getAllInfo(string) {
+    fetch(
+      "https://api.spoonacular.com/recipes/informationBulk?ids=" +
+        string +
+        "&apiKey=" +
+        apikey
+    )
+      .then((response) => {
+        return response.json();
+      })
+      .then((result) => {
+        console.log(result);
+        setSearchedRecipes({ ...searchedRecipes, recipes: result });
       })
       .catch((error) => {
         console.log(error);
@@ -48,11 +77,10 @@ function ListRecipes(props) {
   const showRecipe = (recipe) => {
     return (
       <div onClick={() => setActiveComponent(<DetailsRecipe id={recipe.id} />)}>
-        <h1>Idée de recette</h1>
-        <h2>{recipe.title ? recipe.title : null}</h2>
+        <h3>{recipe.title ? recipe.title : null}</h3>
         <img
           src={
-            state.randomRecipe[0]
+            recipe.image
               ? recipe.image
               : "https://upload.wikimedia.org/wikipedia/commons/thumb/e/e6/Pas_d%27image_disponible.svg/300px-Pas_d%27image_disponible.svg.png"
           }
@@ -68,22 +96,22 @@ function ListRecipes(props) {
       <div>
         <div>
           <div>
-            <form onSubmit={() => searchRecipes("cake")}>
-              <label for="search">Rechercher une recette: </label>
-              <br />
-              <input type="text" name="search" id="search" required />
-              <br />
-              <input type="submit" value="Recherche" />
-            </form>
+            <label>Rechercher une recette: </label>
+            <br />
+            <input type="text" name="search" id="search" required />
+            <br />
+            <label>Nombre de recettes à afficher : </label>
+            <input type="number" id="number" name="number" min="1" max="50" />
+            <br />
+            <button onClick={() => searchRecipes()}>Recherche</button>
           </div>
-
-          {showRecipe(state.randomRecipe[0])}
+          <h1>Idée de recette</h1>
+          {showRecipe(randomRecipe.recipe[0])}
         </div>
 
         <div>
           <h1>Recette recherchées</h1>
-          {state.searchedRecipes.map((recipe) => showRecipe(recipe))}
-
+          {searchedRecipes.recipes.map((recipe) => showRecipe(recipe))}
         </div>
       </div>
     );
