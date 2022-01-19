@@ -21,7 +21,6 @@ function DetailsRecipe(props) {
       })
       .then((result) => {
         setState({ ...state, recipe: result[0] });
-        console.log(result);
         setLoading(false);
       })
       .catch((error) => {

@@ -82,7 +82,7 @@ function ListRecipes(props) {
   const showRecipe = (recipe) => {
     return (
       <div onClick={() => setActiveComponent(<DetailsRecipe id={recipe.id} />)}>
-        <h3>{recipe.title ? recipe.title : null}</h3>
+        <h2>{recipe.title ? recipe.title : null}</h2>
         <img
           src={
             recipe.image
@@ -90,6 +90,7 @@ function ListRecipes(props) {
               : "https://upload.wikimedia.org/wikipedia/commons/thumb/e/e6/Pas_d%27image_disponible.svg/300px-Pas_d%27image_disponible.svg.png"
           }
         ></img>
+        <br /><br />
       </div>
     );
   };
@@ -123,7 +124,7 @@ function ListRecipes(props) {
             <input type="text" name="search" id="search" required />
             <br />
             <label>Nombre de recettes à afficher : </label>
-            <input type="number" id="number" name="number" min="1" max="50" />
+            <input type="number" id="number" name="number" min="1" max="50" placeholder="10"/>
             <br />
             <button onClick={() => searchRecipes()}>Recherche</button><br />
             <button onClick={() => {getRandomRecipe(); setSearchedRecipes({ ...searchedRecipes, recipes: [] })}}>Recette aléatoire</button>
