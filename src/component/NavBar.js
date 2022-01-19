@@ -5,10 +5,11 @@ import Profile from "./Profile";
 import ListRecipes from "./ListRecipes";
 import { UserOutlined } from "@ant-design/icons";
 import { useEffect } from "react";
+import { useState } from "react";
 
 
 const NavBar = (props) => {
-
+const firebaseApp = initializeApp(firebaseConfig);
 const auth = getAuth(firebaseApp);
 const [user, setUser] = useState({});
 onAuthStateChanged(auth, (curentUser) =>{
