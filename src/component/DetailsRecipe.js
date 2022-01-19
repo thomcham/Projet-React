@@ -3,7 +3,7 @@ import React, { useEffect, useState } from "react";
 
 function DetailsRecipe(props) {
   const { id } = props;
-  const apikey = "1a3ecf21f1264ffbbcfac427d1d2abfd";
+  const apikey = "13e4cb48cd9c4aa0b91d998d61ff84ae";
 
   const [state, setState] = useState({ recipe: [] });
   const [loading, setLoading] = useState(true);

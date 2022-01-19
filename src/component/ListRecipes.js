@@ -1,10 +1,13 @@
+/* eslint-disable no-unused-vars */
+/* eslint-disable react-hooks/exhaustive-deps */
+/* eslint-disable jsx-a11y/alt-text */
 import React, { useEffect, useState } from "react";
 import DetailsRecipe from "./DetailsRecipe";
 import { LoadingOutlined } from "@ant-design/icons";
 
 function ListRecipes(props) {
   const { setActiveComponent } = props;
-  const apikey = "1a3ecf21f1264ffbbcfac427d1d2abfd";
+  const apikey = "13e4cb48cd9c4aa0b91d998d61ff84ae";
 
   const [randomRecipe, setRandomRecipe] = useState({ recipe: [] });
   const [searchedRecipes, setSearchedRecipes] = useState({ recipes: [] });
@@ -13,6 +16,10 @@ function ListRecipes(props) {
 
   useEffect(() => {
     setLoading(<LoadingOutlined />);
+    getRandomRecipe();
+  }, [state]);
+
+  function getRandomRecipe() {
     fetch("https://api.spoonacular.com/recipes/random?apiKey=" + apikey)
       .then((response) => {
         return response.json();
@@ -25,10 +32,9 @@ function ListRecipes(props) {
         console.log(error);
         setLoading(false);
       });
-  }, [state]);
+  }
 
   function searchRecipes() {
-    console.log(document.getElementById("number").value);
     var search = document.getElementById("search").value;
     var number = document.getElementById("number").value
       ? document.getElementById("number").value
@@ -66,7 +72,6 @@ function ListRecipes(props) {
         return response.json();
       })
       .then((result) => {
-        console.log(result);
         setSearchedRecipes({ ...searchedRecipes, recipes: result });
       })
       .catch((error) => {
@@ -89,6 +94,24 @@ function ListRecipes(props) {
     );
   };
 
+  const displayChoice = () => {
+    if (searchedRecipes.recipes.length > 1) {
+      return (
+        <div>
+          <h1>Recette recherchées</h1>
+          {searchedRecipes.recipes.map((recipe) => showRecipe(recipe))}
+        </div>
+      );
+    } else {
+      return (
+        <div>
+          <h1>Idée de recette</h1>
+          {showRecipe(randomRecipe.recipe[0])}
+        </div>
+      );
+    }
+  };
+
   if (loading) {
     return loading;
   } else {
@@ -96,22 +119,16 @@ function ListRecipes(props) {
       <div>
         <div>
           <div>
-            <label>Rechercher une recette: </label>
-            <br />
+            <label>Rechercher une recette : </label>
             <input type="text" name="search" id="search" required />
             <br />
             <label>Nombre de recettes à afficher : </label>
             <input type="number" id="number" name="number" min="1" max="50" />
             <br />
-            <button onClick={() => searchRecipes()}>Recherche</button>
+            <button onClick={() => searchRecipes()}>Recherche</button><br />
+            <button onClick={() => {getRandomRecipe(); setSearchedRecipes({ ...searchedRecipes, recipes: [] })}}>Recette aléatoire</button>
           </div>
-          <h1>Idée de recette</h1>
-          {showRecipe(randomRecipe.recipe[0])}
-        </div>
-
-        <div>
-          <h1>Recette recherchées</h1>
-          {searchedRecipes.recipes.map((recipe) => showRecipe(recipe))}
+          {displayChoice()}
         </div>
       </div>
     );
