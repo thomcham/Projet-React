@@ -3,7 +3,7 @@ import { Button, Form, Input, message } from "antd";
 import { Loading3QuartersOutlined } from "@ant-design/icons";
 import { initializeApp } from "firebase/app";
 import { firebaseConfig } from "../lib/fireBaseCredential.js";
-import { getAuth } from "firebase/auth";
+import { getAuth, onAuthStateChanged } from "firebase/auth";
 import { useState } from "react";
 import { collection, addDoc, getFirestore } from "firebase/firestore";
 

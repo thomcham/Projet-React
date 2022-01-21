@@ -1,6 +1,8 @@
 import { Menu, Layout } from "antd";
 import Login from "./Login";
 import { getAuth , onAuthStateChanged} from "firebase/auth";
+import { initializeApp } from "firebase/app";
+import { firebaseConfig } from "../lib/fireBaseCredential";
 import Profile from "./Profile";
 import ListRecipes from "./ListRecipes";
 import { UserOutlined } from "@ant-design/icons";
@@ -9,6 +11,7 @@ import { useState } from "react";
 
 
 const NavBar = (props) => {
+
 const firebaseApp = initializeApp(firebaseConfig);
 const auth = getAuth(firebaseApp);
 const [user, setUser] = useState({});
