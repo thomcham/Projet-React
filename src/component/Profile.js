@@ -1,9 +1,9 @@
-import { createUserWithEmailAndPassword } from "@firebase/auth";
+import { createUserWithEmailAndPassword , signOut} from "@firebase/auth";
 import { Button, Form, Input, message } from "antd";
 import { Loading3QuartersOutlined } from "@ant-design/icons";
 import { initializeApp } from "firebase/app";
 import { firebaseConfig } from "../lib/fireBaseCredential.js";
-import { getAuth } from "firebase/auth";
+import { getAuth, onAuthStateChanged } from "firebase/auth";
 import { useState } from "react";
 import { collection, addDoc, getFirestore } from "firebase/firestore";
 
@@ -11,6 +11,10 @@ const Profile = () => {
   const firebaseApp = initializeApp(firebaseConfig);
   const auth = getAuth(firebaseApp);
   const db = getFirestore();
+  const [user, setUser] = useState({});
+    onAuthStateChanged(auth, (curentUser) =>{
+    setUser(curentUser)
+  });
 
   const [loading, setLoading] = useState(false);
   const [state, setState] = useState();
@@ -121,9 +125,14 @@ const Profile = () => {
           span: 16,
         }}
       >
-        <Button type="primary" htmlType="submit">
+        {user ? <Button type="primary" htmlType="submit">
+          Déconnexion {loading}
+        </Button> : <Button type="primary" htmlType="submit">
           Inscription {loading}
-        </Button>
+        </Button>}
+        
+
+        
       </Form.Item>
     </Form>
   );

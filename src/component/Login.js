@@ -9,6 +9,8 @@ import { Loading3QuartersOutlined } from "@ant-design/icons";
 const firebaseApp = initializeApp(firebaseConfig);
 const auth = getAuth(firebaseApp);
 
+
+
 const Login = (props) => {
   const { setActiveComponent } = props;
 
@@ -80,3 +82,4 @@ const Login = (props) => {
 };
 
 export default Login;
+

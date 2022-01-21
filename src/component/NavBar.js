@@ -1,11 +1,23 @@
 import { Menu, Layout } from "antd";
 import Login from "./Login";
+import { getAuth , onAuthStateChanged} from "firebase/auth";
+import { initializeApp } from "firebase/app";
+import { firebaseConfig } from "../lib/fireBaseCredential";
 import Profile from "./Profile";
 import ListRecipes from "./ListRecipes";
 import { UserOutlined } from "@ant-design/icons";
 import { useEffect } from "react";
+import { useState } from "react";
+
 
 const NavBar = (props) => {
+
+const firebaseApp = initializeApp(firebaseConfig);
+const auth = getAuth(firebaseApp);
+const [user, setUser] = useState({});
+onAuthStateChanged(auth, (curentUser) =>{
+  setUser(curentUser)
+});
 
 const { setActiveComponent } = props;
 
@@ -47,7 +59,7 @@ const { setActiveComponent } = props;
   return (
     <Layout.Header>
       <Menu mode="horizontal">
-          {labels.map((item) => showItem(item))}
+          {labels.map((item) => ((item.key==="listRecipes" && user) || item!=="listRecipes") && showItem(item))}
         </Menu>
     </Layout.Header>
   );
